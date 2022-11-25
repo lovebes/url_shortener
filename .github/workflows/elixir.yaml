@@ -18,6 +18,19 @@ jobs:
       matrix:
         elixir: [1.14.2]
         otp: [25.1.2]
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.6.0
@@ -102,6 +115,12 @@ jobs:
     name: Unit Tests
     needs: deps
     runs-on: ubuntu-18.04
+    env:
+      # matches the postgres service above
+      PGUSER: postgres
+      PGPASS: postgres
+      PGHOST: postgres
+      PGPORT: 5432
     strategy:
       fail-fast: false
       matrix:
