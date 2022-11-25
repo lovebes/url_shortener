@@ -46,6 +46,7 @@ if config_env() == :test do
 end
 
 if config_env() == :prod do
+  # Fly.io automatically injects the DATABASE_URL during provisioning for Postgres
   database_url =
     System.get_env("DATABASE_URL") ||
       raise """

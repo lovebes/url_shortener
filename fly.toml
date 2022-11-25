@@ -1,4 +1,4 @@
-# fly.toml file generated for url-shortener-seungjin on 2022-11-24T21:22:01-08:00
+# fly.toml file generated for url-shortener-seungjin on 2022-11-24T21:23:57-08:00
 
 app = "url-shortener-seungjin"
 
