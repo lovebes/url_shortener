@@ -1,0 +1,28 @@
+# ./Dockerfile
+
+# Extend from the official Elixir image
+FROM hexpm/elixir:1.14.2-erlang-25.1.2-alpine-3.16.2
+
+RUN \
+    apk update && \
+    apk --no-cache --update add \
+      inotify-tools
+    
+# Create app directory and copy the Elixir projects into it
+RUN mkdir /app
+COPY . /app
+WORKDIR /app
+
+# Install hex package manager
+# By using --force, we don’t need to type “Y” to confirm the installation
+RUN mix local.hex --force
+
+# Compile the project
+RUN mix deps.get
+# something about rebar
+RUN mix local.rebar --force
+
+RUN mix do compile
+
+CMD ["/app/entrypoint.sh"]
+

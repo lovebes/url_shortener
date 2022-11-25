@@ -20,6 +20,31 @@ if System.get_env("PHX_SERVER") do
   config :url_shortener, UrlShortenerWeb.Endpoint, server: true
 end
 
+if config_env() == :dev do
+  DotenvParser.load_file(".env")
+
+  config :url_shortener, UrlShortener.Repo,
+    username: System.get_env("PGUSER", "postgres"),
+    password: System.get_env("PGPASS", "postgres"),
+    database: System.get_env("PGDATABASE", "url_shortener_dev"),
+    hostname: System.get_env("PGHOST", "db"),
+    port: System.get_env("PGPORT", "5665") |> String.to_integer()
+end
+
+if config_env() == :test do
+  DotenvParser.load_file(".env.test")
+  # The MIX_TEST_PARTITION environment variable can be used
+  # to provide built-in test partitioning in CI environment.
+  # Run `mix help test` for more information.
+  config :url_shortener, UrlShortener.Repo,
+    username: System.get_env("PGUSER", "postgres"),
+    password: System.get_env("PGPASS", "postgres"),
+    database:
+      "#{System.get_env("PGDATABASE", "url_shortener_test")}#{System.get_env("MIX_TEST_PARTITION")}",
+    hostname: System.get_env("PGHOST", "db"),
+    port: System.get_env("PGPORT", "5665") |> String.to_integer()
+end
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||

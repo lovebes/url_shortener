@@ -32,6 +32,7 @@ defmodule UrlShortener.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:dotenv_parser, "~> 2.0"},
       {:ecto_sql, "~> 3.6"},
       {:esbuild, "~> 0.5", runtime: Mix.env() == :dev},
       {:finch, "~> 0.13"},
