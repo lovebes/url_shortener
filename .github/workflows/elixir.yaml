@@ -9,6 +9,11 @@ on:
 env:
   MIX_ENV: test
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+  # matches the postgres service above
+  PGUSER: postgres
+  PGPASS: postgres
+  PGHOST: postgres
+  PGPORT: 5432
 
 jobs:
   deps:
@@ -115,12 +120,6 @@ jobs:
     name: Unit Tests
     needs: deps
     runs-on: ubuntu-18.04
-    env:
-      # matches the postgres service above
-      PGUSER: postgres
-      PGPASS: postgres
-      PGHOST: postgres
-      PGPORT: 5432
     strategy:
       fail-fast: false
       matrix:
