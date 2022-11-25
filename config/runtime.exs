@@ -32,7 +32,9 @@ if config_env() == :dev do
 end
 
 if config_env() == :test do
-  DotenvParser.load_file(".env.test")
+  if not System.get_env("IS_IN_CI", false),
+    do: DotenvParser.load_file(".env.test")
+
   # The MIX_TEST_PARTITION environment variable can be used
   # to provide built-in test partitioning in CI environment.
   # Run `mix help test` for more information.
