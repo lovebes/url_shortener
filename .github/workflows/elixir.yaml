@@ -109,7 +109,7 @@ jobs:
         run: mix credo
 
       - name: Run Dialyzer
-        run: mix dialyzer --no-check --halt-exit-status
+        run: mix dialyzer --no-check
 
   unit_tests:
     name: Unit Tests
