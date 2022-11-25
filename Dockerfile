@@ -92,4 +92,10 @@ COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/url_shortener
 
 USER nobody
 
+# Create a symlink to the command that starts your application. This is required
+# since the release directory and start up script are named after the
+# application, and we don't know that name. This used for deploy section in fly.toml
+RUN set -eux; \
+  ln -nfs /app/$(basename *)/bin/$(basename *) /app/entry
+
 CMD ["/app/bin/server"]
