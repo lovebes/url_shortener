@@ -53,6 +53,9 @@ ARG MIX_ENV
 RUN apk add --no-cache libstdc++ openssl ncurses-libs
 
 ENV USER="elixir"
+# Appended by flyctl
+ENV ECTO_IPV6 true
+ENV ERL_AFLAGS "-proto_dist inet6_tcp"
 
 WORKDIR "/home/${USER}/app"
 
