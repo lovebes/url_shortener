@@ -111,7 +111,7 @@ jobs:
     env:
       MIX_ENV: test
     runs-on: ubuntu-18.04
-    container: ubuntu-18.04
+    container: ubuntu:18.04
     services:
       postgres:
         image: postgres:12.4
