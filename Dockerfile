@@ -53,7 +53,7 @@ ARG MIX_ENV
 RUN apk add --no-cache libstdc++ openssl ncurses-libs
 
 ENV USER="elixir"
-ARG APP_NAME="url_shortener"
+ENV APP_NAME="url_shortener"
 
 WORKDIR "/home/${USER}/app"
 
@@ -76,6 +76,6 @@ USER "${USER}"
 # copy release executables
 COPY --from=build --chown="${USER}":"${USER}" /app/_build/"${MIX_ENV}"/rel/"${APP_NAME}" ./
 
-ENTRYPOINT bin/${APP_NAME}
+ENTRYPOINT bin/$APP_NAME
 
 CMD ["start"]
