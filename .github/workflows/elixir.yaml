@@ -8,6 +8,7 @@ on:
 
 env:
   MIX_ENV: test
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
 jobs:
   deps:
@@ -135,3 +136,11 @@ jobs:
 
       - name: Run test
         run: mix test --trace --slowest 10
+
+  deploy:
+    name: Deploy app to Fly.io
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only
