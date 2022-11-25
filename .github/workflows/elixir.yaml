@@ -20,7 +20,7 @@ jobs:
         otp: [25.1.2]
     services:
       postgres:
-        image: postgres:12
+        image: postgres:12.4
         env:
           POSTGRES_PASSWORD: postgres
         options: >-
