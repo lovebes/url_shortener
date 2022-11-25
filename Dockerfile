@@ -66,6 +66,7 @@ RUN mix release
 # start a new build stage so that the final image will only contain
 # the compiled release and other runtime necessities
 FROM ${RUNNER_IMAGE}
+ARG APP_BIN_NAME=url_shortener
 
 RUN apt-get update -y && apt-get install -y libstdc++6 openssl libncurses5 locales \
   && apt-get clean && rm -f /var/lib/apt/lists/*_*
@@ -97,6 +98,6 @@ USER nobody
 # since the release directory and start up script are named after the
 # application, and we don't know that name.
 RUN set -eux; \
-  ln -nfs /app/$(basename *)/bin/$(basename *) /app/entry
+  ln -nfs /app/bin/${APP_BIN_NAME} /app/entry
 
 CMD ["/app/bin/server"]
