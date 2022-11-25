@@ -36,3 +36,5 @@ url_shortener-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Deployment env vars for Dockerfile
+docker.env.list
