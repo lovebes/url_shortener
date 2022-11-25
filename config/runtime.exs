@@ -32,7 +32,7 @@ if config_env() == :dev do
 end
 
 if config_env() == :test do
-  if not System.get_env("IS_IN_CI", false),
+  if is_nil(System.get_env("IS_IN_CI")),
     do: DotenvParser.load_file(".env.test")
 
   # The MIX_TEST_PARTITION environment variable can be used
