@@ -139,6 +139,9 @@ jobs:
 
   deploy:
     name: Deploy app to Fly.io
+    needs:
+      - static_code_analysis
+      - unit_tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
