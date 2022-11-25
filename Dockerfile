@@ -1,10 +1,13 @@
 ARG MIX_ENV="prod"
+ARG BUILDER_IMAGE="hexpm/elixir:1.14.2-erlang-25.1.2-debian-bullseye-20221004-slim"
+ARG RUNNER_IMAGE="debian:bullseye-20221004-slim"
 
 # build stage
-FROM hexpm/elixir:1.14.2-erlang-25.1.2-alpine-3.16.2 AS build
+FROM ${BUILDER_IMAGE} AS build
 
 # install build dependencies
-RUN apk add --no-cache build-base git python3 curl
+RUN apt-get update -y && apt-get install -y build-essential git \
+    && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
 # sets work dir
 WORKDIR /app
@@ -45,39 +48,37 @@ COPY config/runtime.exs config/
 RUN mix release
 
 # app stage
-FROM alpine:3.16.2 AS app
+FROM ${RUNNER_IMAGE} AS app
 
 ARG MIX_ENV
 
 # install runtime dependencies
-RUN apk add --no-cache libstdc++ openssl ncurses-libs
+RUN apt-get update -y && apt-get install -y libstdc++6 openssl libncurses5 locales \
+  && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
-ENV USER="elixir"
+# Set the locale
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 # Appended by flyctl
 ENV ECTO_IPV6 true
 ENV ERL_AFLAGS "-proto_dist inet6_tcp"
 
-WORKDIR "/home/${USER}/app"
+ENV USER="elixir"
 
-# Create  unprivileged user to run the release
-RUN \
-    addgroup \
-    -g 1000 \
-    -S "${USER}" \
-    && adduser \
-    -s /bin/sh \
-    -u 1000 \
-    -G "${USER}" \
-    -h "/home/${USER}" \
-    -D "${USER}" \
-    && su "${USER}"
+WORKDIR "/app"
+RUN chown nobody /app
 
-# run as user
-USER "${USER}"
+# Only copy the final release from the build stage
+COPY --from=builder --chown=nobody:root /app/_build/prod/rel ./
 
-# copy release executables
-COPY --from=build --chown="${USER}":"${USER}" /app/_build/"${MIX_ENV}"/rel/url_shortener ./
+USER nobody
 
-EXPOSE 4000
-ENTRYPOINT bin/url_shortener
-CMD ["start"]
+# Create a symlink to the command that starts your application. This is required
+# since the release directory and start up script are named after the
+# application, and we don't know that name.
+RUN set -eux; \
+  ln -nfs /app/$(basename *)/bin/$(basename *) /app/entry
+
+CMD /app/entry start
