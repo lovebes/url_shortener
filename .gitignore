@@ -38,3 +38,7 @@ npm-debug.log
 
 # Deployment env vars for Dockerfile
 docker.env.list
+
+# wireguard
+wireguard.conf
+
