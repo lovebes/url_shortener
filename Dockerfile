@@ -76,6 +76,6 @@ USER "${USER}"
 # copy release executables
 COPY --from=build --chown="${USER}":"${USER}" /app/_build/"${MIX_ENV}"/rel/"${APP_NAME}" ./
 
-ENTRYPOINT ["bin/${APP_NAME}"]
+ENTRYPOINT ["bin/url_shortener"]
 
 CMD ["start"]
