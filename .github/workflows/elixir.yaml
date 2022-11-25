@@ -66,7 +66,7 @@ jobs:
           mix local.hex --force
           mix deps.get
           mix deps.compile
-          mix dialyzer --plt
+          MIX_ENV=dev mix dialyzer --plt
   static_code_analysis:
     name: Static Code Analysis
     needs: deps
@@ -109,7 +109,7 @@ jobs:
         run: mix credo
 
       - name: Run Dialyzer
-        run: mix dialyzer --no-check --format github
+        run: MIX_ENV=dev mix dialyzer --no-check --format github
 
   unit_tests:
     name: Unit Tests
