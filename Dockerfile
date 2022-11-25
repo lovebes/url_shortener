@@ -1,3 +1,5 @@
+# Adapted from https://github.com/fly-apps/hello_elixir
+
 ARG MIX_ENV="prod"
 ARG BUILDER_IMAGE="hexpm/elixir:1.14.2-erlang-25.1.2-debian-bullseye-20221004-slim"
 ARG RUNNER_IMAGE="debian:bullseye-20221114-slim"
