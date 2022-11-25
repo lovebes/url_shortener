@@ -53,7 +53,7 @@ ARG MIX_ENV
 RUN apk add --no-cache libstdc++ openssl ncurses-libs
 
 ENV USER="elixir"
-ENV APP_NAME="url_shortener"
+ARG APP_NAME="url_shortener"
 
 WORKDIR "/home/${USER}/app"
 
