@@ -79,5 +79,5 @@ USER "${USER}"
 COPY --from=build --chown="${USER}":"${USER}" /app/_build/"${MIX_ENV}"/rel/url_shortener ./
 
 ENTRYPOINT ["bin/url_shortener"]
-
+EXPOSE 4000
 CMD ["start"]
