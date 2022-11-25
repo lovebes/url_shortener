@@ -13,7 +13,7 @@ env:
   # matches the postgres service above
   PGUSER: postgres
   PGPASS: postgres
-  PGHOST: postgres
+  PGHOST: localhost
   PGPORT: 5432
 
 jobs:
@@ -108,10 +108,7 @@ jobs:
   unit_tests:
     name: Unit Tests
     needs: deps
-    env:
-      MIX_ENV: test
     runs-on: ubuntu-18.04
-    container: ubuntu:18.04
     services:
       postgres:
         image: postgres:12.4
@@ -122,6 +119,11 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+    env:
+      MIX_ENV: test
     strategy:
       fail-fast: false
       matrix:
