@@ -73,7 +73,7 @@ RUN \
 USER "${USER}"
 
 # copy release executables
-COPY --from=build --chown="${USER}":"${USER}" /app/_build/"${MIX_ENV}"/rel/saturn ./
+COPY --from=build --chown="${USER}":"${USER}" /app/_build/"${MIX_ENV}"/rel/url_shortener ./
 
 ENTRYPOINT ["bin/saturn"]
 
