@@ -3,7 +3,7 @@ ARG BUILDER_IMAGE="hexpm/elixir:1.14.2-erlang-25.1.2-debian-bullseye-20221004-sl
 ARG RUNNER_IMAGE="debian:bullseye-20221114-slim"
 
 # build stage
-FROM ${BUILDER_IMAGE} AS build
+FROM ${BUILDER_IMAGE} AS builder
 
 # install build dependencies
 RUN apt-get update -y && apt-get install -y build-essential git \
