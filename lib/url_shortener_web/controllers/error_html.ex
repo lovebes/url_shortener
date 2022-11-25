@@ -1,4 +1,5 @@
 defmodule UrlShortenerWeb.ErrorHTML do
+  @moduledoc false
   use UrlShortenerWeb, :html
 
   # If you want to customize your error pages,
