@@ -30,9 +30,6 @@ defmodule UrlShortener.TinyUrls.TinyUrl do
     changeset
     |> validate_change(:url, fn :url, url ->
       # validate via URI parsing
-      require IEx
-      IEx.pry()
-
       if is_valid_url?(URI.parse(url)) do
         []
       else
@@ -44,6 +41,8 @@ defmodule UrlShortener.TinyUrls.TinyUrl do
   defp is_valid_url?(%URI{scheme: scheme, host: host}) do
     !is_nil(scheme) && is_valid_host?(host)
   end
+
+  defp is_valid_host?(nil), do: false
 
   defp is_valid_host?(host) do
     # bare minimum host format check to have a '.' in between

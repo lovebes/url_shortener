@@ -36,6 +36,17 @@ defmodule UrlShortener.TinyUrls.TinyUrlTest do
         })
 
       assert %{url: ["invalid url - scheme or host is missing"]} = errors_on(changeset)
+
+      url = "http:"
+
+      changeset =
+        TinyUrl.changeset(%TinyUrl{}, %{
+          url: url,
+          shortened_url: "shrt",
+          hashed_url: hashed_url
+        })
+
+      assert %{url: ["invalid url - scheme or host is missing"]} = errors_on(changeset)
     end
 
     test "should be valid changeset for valid url" do

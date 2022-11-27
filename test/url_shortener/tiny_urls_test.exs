@@ -27,12 +27,19 @@ defmodule UrlShortener.TinyUrlsTest do
     end
 
     test "create_tiny_url/1 with valid data creates a tiny_url" do
-      valid_attrs = %{hit_count: 42, shortened_url: "some shortened_url", url: "some url"}
+      url = "http://some.url"
+
+      valid_attrs = %{
+        hit_count: 42,
+        hashed_url: Shortener.hash_url(url),
+        shortened_url: "some shortened_url",
+        url: url
+      }
 
       assert {:ok, %TinyUrl{} = tiny_url} = TinyUrls.create_tiny_url(valid_attrs)
       assert tiny_url.hit_count == 42
       assert tiny_url.shortened_url == "some shortened_url"
-      assert tiny_url.url == "some url"
+      assert tiny_url.url == "http://some.url"
     end
 
     test "create_tiny_url/1 with valid url as arg creates a tiny_url" do
@@ -55,13 +62,13 @@ defmodule UrlShortener.TinyUrlsTest do
       update_attrs = %{
         hit_count: 43,
         shortened_url: "some updated shortened_url",
-        url: "some updated url"
+        url: "http://some.updated.com"
       }
 
       assert {:ok, %TinyUrl{} = tiny_url} = TinyUrls.update_tiny_url(tiny_url, update_attrs)
       assert tiny_url.hit_count == 43
       assert tiny_url.shortened_url == "some updated shortened_url"
-      assert tiny_url.url == "some updated url"
+      assert tiny_url.url == "http://some.updated.com"
     end
 
     test "update_tiny_url/2 with invalid data returns error changeset" do
@@ -90,7 +97,7 @@ defmodule UrlShortener.TinyUrlsTest do
 
       changeset = Ecto.Changeset.change(%TinyUrl{}, attrs)
 
-      assert tiny_url == TinyUrls.get_or_insert_tiny_url(changeset)
+      assert {:ok, tiny_url} == TinyUrls.get_or_insert_tiny_url(changeset)
     end
 
     test "get_or_insert_tiny_url/1 inserts tiny url if not found" do

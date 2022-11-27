@@ -5,7 +5,11 @@ defmodule UrlShortenerWeb.TinyUrlLiveTest do
   import UrlShortener.TinyUrlsFixtures
 
   @create_attrs %{hit_count: 42, shortened_url: "some shortened_url", url: "some url"}
-  @update_attrs %{hit_count: 43, shortened_url: "some updated shortened_url", url: "some updated url"}
+  @update_attrs %{
+    hit_count: 43,
+    shortened_url: "some updated shortened_url",
+    url: "some updated url"
+  }
   @invalid_attrs %{hit_count: nil, shortened_url: nil, url: nil}
 
   defp create_tiny_url(_) do
