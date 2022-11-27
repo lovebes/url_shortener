@@ -20,29 +20,33 @@ if System.get_env("PHX_SERVER") do
   config :url_shortener, UrlShortenerWeb.Endpoint, server: true
 end
 
-if config_env() == :dev do
-  DotenvParser.load_file(".env")
-
-  hostname =
+defmodule LocalConfig do
+  def db_hostname() do
     if System.get_env("RUNNING_IN_DOCKER") do
       System.get_env("PGHOST", "db")
     else
       System.get_env("NON_DOCKER_PGHOST", "localhost")
     end
+  end
 
-  port =
+  def db_port() do
     if System.get_env("RUNNING_IN_DOCKER") do
       System.get_env("PGPORT", "5432")
     else
       System.get_env("NON_DOCKER_PORT", "6543")
     end
+  end
+end
+
+if config_env() == :dev do
+  DotenvParser.load_file(".env")
 
   config :url_shortener, UrlShortener.Repo,
     username: System.get_env("PGUSER", "postgres"),
     password: System.get_env("PGPASS", "postgres"),
     database: System.get_env("PGDATABASE", "url_shortener_dev"),
-    hostname: hostname,
-    port: port |> String.to_integer()
+    hostname: LocalConfig.db_hostname(),
+    port: LocalConfig.db_port() |> String.to_integer()
 end
 
 if config_env() == :test do
@@ -57,8 +61,8 @@ if config_env() == :test do
     password: System.get_env("PGPASS", "postgres"),
     database:
       "#{System.get_env("PGDATABASE", "url_shortener_test")}#{System.get_env("MIX_TEST_PARTITION")}",
-    hostname: System.get_env("PGHOST", "db"),
-    port: System.get_env("PGPORT", "5665") |> String.to_integer()
+    hostname: LocalConfig.db_hostname(),
+    port: LocalConfig.db_port() |> String.to_integer()
 end
 
 if config_env() == :prod do
