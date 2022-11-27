@@ -9,6 +9,7 @@ on:
 env:
   # Give flag to runtime.exs test conditional to not use the .env.test file
   IS_IN_CI: true
+  RUNNING_IN_DOCKER: true
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
   # matches the postgres service above
   PGUSER: postgres
