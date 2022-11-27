@@ -20,7 +20,7 @@ defmodule UrlShortenerWeb.TinyUrlLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={{f, :url}} type="text" label="url" />
+        <.input field={{f, :url}} type="text" label="url" disabled="true" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Tiny url</.button>
         </:actions>
