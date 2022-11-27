@@ -38,6 +38,22 @@ defmodule UrlShortener.TinyUrls do
   def get_tiny_url!(id), do: Repo.get!(TinyUrl, id)
 
   @doc """
+  Gets a single tiny_url by :hashed_url
+
+  Returns `nil` if the Tiny url does not exist.
+
+  ## Examples
+
+      iex> get_tiny_url_by_hash!("694F56F4B30E60837151723777795FC2")
+      %TinyUrl{}
+
+      iex> get_tiny_url!("da23423514")
+      nil
+
+  """
+  def get_tiny_url_by_hash(hashed_url), do: Repo.get_by(TinyUrl, hashed_url: hashed_url)
+
+  @doc """
   Creates a tiny_url.
 
   ## Examples
@@ -53,6 +69,35 @@ defmodule UrlShortener.TinyUrls do
     %TinyUrl{}
     |> TinyUrl.changeset(attrs)
     |> Repo.insert()
+  end
+
+  @doc """
+  Either returns an existing row based on :hashed_url or inserts a valid changeset.
+  Entire operation is done in a transaction.
+  Returns %TinyUrl{} (existing or inserted one), or error tuple for any unexpected errors
+  """
+  @spec get_or_insert_tiny_url(Ecto.Changeset.t()) ::
+          %TinyUrl{}
+          | {:error, failed_operation :: atom(), failed_value :: any(), changes_so_far :: list()}
+  def get_or_insert_tiny_url(%Ecto.Changeset{valid?: true} = changeset) do
+    %TinyUrl{hashed_url: hashed_url} = Ecto.Changeset.apply_changes(changeset)
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.one(:stored_url, from(tu in TinyUrl, where: tu.hashed_url == ^hashed_url))
+    # then exit out if already exists
+    |> Ecto.Multi.run(:check_exists, fn
+      _repo, %{stored_url: %TinyUrl{} = existing} -> {:error, {:url_exists, existing}}
+      _repo, %{stored_url: nil} -> {:ok, nil}
+    end)
+    |> Ecto.Multi.insert(:insert_url, changeset)
+    |> Repo.transaction()
+    |> case do
+      {:error, :check_exists, {:url_exists, existing}, _changes_so_far} ->
+        existing
+
+      {:ok, %{insert_url: inserted_url}} ->
+        inserted_url
+    end
   end
 
   @doc """

@@ -2,6 +2,8 @@ defmodule UrlShortener.TinyUrls.TinyUrl do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t() :: __MODULE__
+
   schema "tiny_urls" do
     field :hit_count, :integer, default: 0
     field :shortened_url, :string
