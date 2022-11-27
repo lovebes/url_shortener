@@ -21,9 +21,6 @@ defmodule UrlShortenerWeb.TinyUrlLive.FormComponent do
         phx-submit="save"
       >
         <.input field={{f, :url}} type="text" label="url" />
-        <.input field={{f, :shortened_url}} type="text" label="shortened_url" />
-        <.input field={{f, :hashed_url}} type="text" label="hashed_url" />
-        <.input field={{f, :hit_count}} type="number" label="hit_count" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Tiny url</.button>
         </:actions>
@@ -70,7 +67,7 @@ defmodule UrlShortenerWeb.TinyUrlLive.FormComponent do
   end
 
   defp save_tiny_url(socket, :new, tiny_url_params) do
-    case TinyUrls.create_tiny_url(tiny_url_params) do
+    case tiny_url_params |> url_from_params() |> TinyUrls.create_tiny_url() do
       {:ok, _tiny_url} ->
         {:noreply,
          socket
@@ -80,5 +77,9 @@ defmodule UrlShortenerWeb.TinyUrlLive.FormComponent do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
+  end
+
+  defp url_from_params(%{"url" => url}) do
+    url
   end
 end
