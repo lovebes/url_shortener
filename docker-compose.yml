@@ -1,11 +1,11 @@
 version: '3.6'
 services:
   db:
+    image: 'postgres:12.4'
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
-    image: 'postgres:12.4'
     restart: always
     volumes:
       - 'pgdata:/var/lib/postgresql/data'
@@ -23,6 +23,18 @@ services:
     ports:
       - '4000:4000'
     volumes:
-      - .:/app
+      - type: bind
+        source: .
+        target: /app
+    command:
+      - ./run.sh
+  test:
+    image: url_shortener_web
+    command: mix test
+    environment:
+      MIX_ENV: test
+      PORT: 4001
+    volumes:
+      - .:/app 
 volumes:
   pgdata:

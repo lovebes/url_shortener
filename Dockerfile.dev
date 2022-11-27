@@ -1,28 +1,18 @@
-# ./Dockerfile
+FROM elixir:1.14
 
-# Extend from the official Elixir image
-FROM hexpm/elixir:1.14.2-erlang-25.1.2-alpine-3.16.2
+# Install debian packages
+RUN apt-get update
+RUN apt-get install --yes build-essential inotify-tools postgresql-client
 
-RUN \
-    apk update && \
-    apk --no-cache --update add \
-      inotify-tools
-    
-# Create app directory and copy the Elixir projects into it
-RUN mkdir /app
-COPY . /app
-WORKDIR /app
+# Install nodejs
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - &&\
+      apt-get install --yes nodejs
 
-# Install hex package manager
-# By using --force, we don’t need to type “Y” to confirm the installation
+# Install Phoenix packages
 RUN mix local.hex --force
-
-# Compile the project
-RUN mix deps.get
-# something about rebar
 RUN mix local.rebar --force
+RUN mix archive.install hex phx_new 1.7.0-rc.0
 
-RUN mix do compile
-
-CMD ["/app/entrypoint.sh"]
-
+WORKDIR /app
+COPY mix.exs .
+COPY mix.lock .
