@@ -116,13 +116,18 @@ defmodule UrlShortener.TinyUrls do
       _repo, %{stored_url: nil} -> {:ok, nil}
     end)
     |> Ecto.Multi.insert(:insert_url, changeset)
+    |> Ecto.Multi.update(:update_shortened_url, fn %{insert_url: inserted} ->
+      Ecto.Changeset.change(inserted,
+        shortened_url: Shortener.shorten_url(inserted.url, inserted.id)
+      )
+    end)
     |> Repo.transaction()
     |> case do
       {:error, :check_exists, {:url_exists, existing}, _changes_so_far} ->
         {:ok, existing}
 
-      {:ok, %{insert_url: inserted_url}} ->
-        {:ok, inserted_url}
+      {:ok, %{update_shortened_url: url_row_with_shortened_url}} ->
+        {:ok, url_row_with_shortened_url}
 
       other_error ->
         other_error

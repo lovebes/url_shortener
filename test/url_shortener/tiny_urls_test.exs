@@ -1,6 +1,7 @@
 defmodule UrlShortener.TinyUrlsTest do
   use UrlShortener.DataCase
 
+  alias UrlShortener.TinyUrls.Shortener
   alias UrlShortener.TinyUrls
 
   describe "tiny_urls" do
@@ -83,12 +84,14 @@ defmodule UrlShortener.TinyUrlsTest do
     end
 
     test "get_or_insert_tiny_url/1 inserts tiny url if not found" do
-      attrs = tiny_url_attrs()
+      attrs = %{tiny_url_attrs() | shortened_url: nil}
       changeset = Ecto.Changeset.change(%TinyUrl{}, attrs)
 
       {:ok, inserted} = TinyUrls.get_or_insert_tiny_url(changeset)
       assert !is_nil(inserted.id)
       assert inserted.hashed_url == attrs.hashed_url
+      assert !is_nil(inserted.shortened_url)
+      assert inserted.shortened_url == Shortener.shorten_url(inserted.url, inserted.id)
     end
   end
 end
