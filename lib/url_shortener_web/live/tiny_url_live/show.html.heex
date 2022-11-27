@@ -10,13 +10,21 @@
 
 <.list>
   <:item title="Url"><%= @tiny_url.url %></:item>
-  <:item title="Shortened url"><%= @tiny_url.shortened_url %></:item>
+  <:item title="Shortened url">
+    <.short_url shortened_url={@tiny_url.shortened_url} />
+  </:item>
+  <:item title="Hashed url"><%= @tiny_url.hashed_url %></:item>
   <:item title="Hit count"><%= @tiny_url.hit_count %></:item>
 </.list>
 
 <.back navigate={~p"/tiny_urls"}>Back to tiny_urls</.back>
 
-<.modal :if={@live_action == :edit} id="tiny_url-modal" show on_cancel={JS.patch(~p"/tiny_urls/#{@tiny_url}")}>
+<.modal
+  :if={@live_action == :edit}
+  id="tiny_url-modal"
+  show
+  on_cancel={JS.patch(~p"/tiny_urls/#{@tiny_url}")}
+>
   <.live_component
     module={UrlShortenerWeb.TinyUrlLive.FormComponent}
     id={@tiny_url.id}
