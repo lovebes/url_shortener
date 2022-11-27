@@ -3,9 +3,10 @@ defmodule UrlShortener.TinyUrls.TinyUrl do
   import Ecto.Changeset
 
   schema "tiny_urls" do
-    field :hit_count, :integer
+    field :hit_count, :integer, default: 0
     field :shortened_url, :string
     field :url, :string
+    field :hashed_url, :string
 
     timestamps()
   end
@@ -13,7 +14,8 @@ defmodule UrlShortener.TinyUrls.TinyUrl do
   @doc false
   def changeset(tiny_url, attrs) do
     tiny_url
-    |> cast(attrs, [:url, :shortened_url, :hit_count])
-    |> validate_required([:url, :shortened_url, :hit_count])
+    |> cast(attrs, [:url, :shortened_url, :hit_count, :hashed_url])
+    |> validate_required([:url, :shortened_url, :hashed_url])
+    |> unique_constraint(:hashed_url)
   end
 end
