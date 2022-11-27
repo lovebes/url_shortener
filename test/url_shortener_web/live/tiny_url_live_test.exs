@@ -1,13 +1,12 @@
 defmodule UrlShortenerWeb.TinyUrlLiveTest do
+  alias UrlShortener.TinyUrls
+  alias UrlShortener.TinyUrls.Shortener
   use UrlShortenerWeb.ConnCase
 
   import Phoenix.LiveViewTest
   import UrlShortener.TinyUrlsFixtures
 
   @create_attrs %{
-    hit_count: 42,
-    shortened_url: "some shortened_url",
-    hashed_url: "some hashed url",
     url: "http://some.url.com"
   }
   @update_attrs %{
@@ -40,10 +39,6 @@ defmodule UrlShortenerWeb.TinyUrlLiveTest do
 
       assert_patch(index_live, ~p"/tiny_urls/new")
 
-      assert index_live
-             |> form("#tiny_url-form", tiny_url: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
-
       {:ok, _, html} =
         index_live
         |> form("#tiny_url-form", tiny_url: @create_attrs)
@@ -51,29 +46,8 @@ defmodule UrlShortenerWeb.TinyUrlLiveTest do
         |> follow_redirect(conn, ~p"/tiny_urls")
 
       assert html =~ "Tiny url created successfully"
-      assert html =~ "some shortened_url"
-    end
-
-    test "updates tiny_url in listing", %{conn: conn, tiny_url: tiny_url} do
-      {:ok, index_live, _html} = live(conn, ~p"/tiny_urls")
-
-      assert index_live |> element("#tiny_urls-#{tiny_url.id} a", "Edit") |> render_click() =~
-               "Edit Tiny url"
-
-      assert_patch(index_live, ~p"/tiny_urls/#{tiny_url}/edit")
-
-      assert index_live
-             |> form("#tiny_url-form", tiny_url: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
-
-      {:ok, _, html} =
-        index_live
-        |> form("#tiny_url-form", tiny_url: @update_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, ~p"/tiny_urls")
-
-      assert html =~ "Tiny url updated successfully"
-      assert html =~ "some updated shortened_url"
+      inserted = TinyUrls.list_tiny_urls() |> hd
+      assert html =~ inserted.shortened_url
     end
 
     test "deletes tiny_url in listing", %{conn: conn, tiny_url: tiny_url} do
@@ -92,28 +66,6 @@ defmodule UrlShortenerWeb.TinyUrlLiveTest do
 
       assert html =~ "Show Tiny url"
       assert html =~ tiny_url.shortened_url
-    end
-
-    test "updates tiny_url within modal", %{conn: conn, tiny_url: tiny_url} do
-      {:ok, show_live, _html} = live(conn, ~p"/tiny_urls/#{tiny_url}")
-
-      assert show_live |> element("a", "Edit") |> render_click() =~
-               "Edit Tiny url"
-
-      assert_patch(show_live, ~p"/tiny_urls/#{tiny_url}/show/edit")
-
-      assert show_live
-             |> form("#tiny_url-form", tiny_url: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
-
-      {:ok, _, html} =
-        show_live
-        |> form("#tiny_url-form", tiny_url: @update_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, ~p"/tiny_urls/#{tiny_url}")
-
-      assert html =~ "Tiny url updated successfully"
-      assert html =~ "some updated shortened_url"
     end
   end
 end
