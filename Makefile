@@ -1,16 +1,15 @@
-# If the first argument is "run"...
-ifeq (run,$(firstword $(MAKECMDGOALS)))
-  # use the rest as arguments for "run"
-  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-  # ...and turn them into do-nothing targets
-  $(eval $(RUN_ARGS):;@:)
-endif
+local_with_docker_db: dkcupdb
+	PGHOST=localhost iex -S mix phx.server 
 
 dkcbuild:
 	docker-compose build
 
 dkcup:
 	docker-compose up -d
+
+dkcupdb:
+	docker-compose up -d db
+
 
 dkcdown:
 	docker-compose down

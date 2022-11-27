@@ -23,12 +23,26 @@ end
 if config_env() == :dev do
   DotenvParser.load_file(".env")
 
+  hostname =
+    if System.get_env("RUNNING_IN_DOCKER") do
+      System.get_env("PGHOST", "db")
+    else
+      System.get_env("NON_DOCKER_PGHOST", "localhost")
+    end
+
+  port =
+    if System.get_env("RUNNING_IN_DOCKER") do
+      System.get_env("PGPORT", "5432")
+    else
+      System.get_env("NON_DOCKER_PORT", "6543")
+    end
+
   config :url_shortener, UrlShortener.Repo,
     username: System.get_env("PGUSER", "postgres"),
     password: System.get_env("PGPASS", "postgres"),
     database: System.get_env("PGDATABASE", "url_shortener_dev"),
-    hostname: System.get_env("PGHOST", "db"),
-    port: System.get_env("PGPORT", "5665") |> String.to_integer()
+    hostname: hostname,
+    port: port |> String.to_integer()
 end
 
 if config_env() == :test do
