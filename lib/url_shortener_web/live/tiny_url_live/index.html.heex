@@ -9,7 +9,9 @@
 
 <.table id="tiny_urls" rows={@tiny_urls} row_click={&JS.navigate(~p"/tiny_urls/#{&1}")}>
   <:col :let={tiny_url} label="Url"><%= tiny_url.url %></:col>
-  <:col :let={tiny_url} label="Shortened url"><%= tiny_url.shortened_url %></:col>
+  <:col :let={tiny_url} label="Shortened url">
+    <.short_url shortened_url={tiny_url.shortened_url} />
+  </:col>
   <:col :let={tiny_url} label="Hit count"><%= tiny_url.hit_count %></:col>
   <:action :let={tiny_url}>
     <div class="sr-only">
