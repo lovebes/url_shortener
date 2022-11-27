@@ -1,5 +1,6 @@
 defmodule UrlShortenerWeb.ShortUrlController do
   use UrlShortenerWeb, :controller
+  require Logger
   import UrlShortener.TinyUrls
 
   @doc """
@@ -13,6 +14,19 @@ defmodule UrlShortenerWeb.ShortUrlController do
         |> text("unable to find url")
 
       tiny_url ->
+        incr_hit_and_redirect(conn, tiny_url)
+        redirect(conn, external: tiny_url.url)
+    end
+  end
+
+  defp incr_hit_and_redirect(conn, tiny_url) do
+    update_tiny_url(tiny_url, %{hit_count: tiny_url.hit_count + 1})
+    |> case do
+      {:ok, _} ->
+        redirect(conn, external: tiny_url.url)
+
+      {:error, err} ->
+        Logger.warn("incr_hit_and_redirect: failed to update hit count. Error: #{inspect(err)}")
         redirect(conn, external: tiny_url.url)
     end
   end
