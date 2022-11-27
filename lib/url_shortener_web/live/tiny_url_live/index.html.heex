@@ -1,0 +1,41 @@
+<.header>
+  Listing Tiny urls
+  <:actions>
+    <.link patch={~p"/tiny_urls/new"}>
+      <.button>New Tiny url</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="tiny_urls" rows={@tiny_urls} row_click={&JS.navigate(~p"/tiny_urls/#{&1}")}>
+  <:col :let={tiny_url} label="Url"><%= tiny_url.url %></:col>
+  <:col :let={tiny_url} label="Shortened url"><%= tiny_url.shortened_url %></:col>
+  <:col :let={tiny_url} label="Hit count"><%= tiny_url.hit_count %></:col>
+  <:action :let={tiny_url}>
+    <div class="sr-only">
+      <.link navigate={~p"/tiny_urls/#{tiny_url}"}>Show</.link>
+    </div>
+    <.link patch={~p"/tiny_urls/#{tiny_url}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={tiny_url}>
+    <.link phx-click={JS.push("delete", value: %{id: tiny_url.id})} data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="tiny_url-modal"
+  show
+  on_cancel={JS.navigate(~p"/tiny_urls")}
+>
+  <.live_component
+    module={UrlShortenerWeb.TinyUrlLive.FormComponent}
+    id={@tiny_url.id || :new}
+    title={@page_title}
+    action={@live_action}
+    tiny_url={@tiny_url}
+    navigate={~p"/tiny_urls"}
+  />
+</.modal>

@@ -18,6 +18,13 @@ defmodule UrlShortenerWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    live "/tiny_urls", TinyUrlLive.Index, :index
+    live "/tiny_urls/new", TinyUrlLive.Index, :new
+    live "/tiny_urls/:id/edit", TinyUrlLive.Index, :edit
+
+    live "/tiny_urls/:id", TinyUrlLive.Show, :show
+    live "/tiny_urls/:id/show/edit", TinyUrlLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.
