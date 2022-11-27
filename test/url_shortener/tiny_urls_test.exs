@@ -35,6 +35,16 @@ defmodule UrlShortener.TinyUrlsTest do
       assert tiny_url.url == "some url"
     end
 
+    test "create_tiny_url/1 with valid url as arg creates a tiny_url" do
+      valid_url = "http://some.valid.com/url?with=params"
+      assert {:ok, %TinyUrl{} = tiny_url} = TinyUrls.create_tiny_url(valid_url)
+
+      assert tiny_url.hit_count == 0
+      assert tiny_url.shortened_url == Shortener.shorten_url(valid_url, tiny_url.id)
+      assert tiny_url.hashed_url == Shortener.hash_url(valid_url)
+      assert tiny_url.url == valid_url
+    end
+
     test "create_tiny_url/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = TinyUrls.create_tiny_url(@invalid_attrs)
     end

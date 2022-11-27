@@ -20,12 +20,14 @@ defmodule UrlShortener.TinyUrlsFixtures do
   Returns attrs for %TinyUrl{}
   """
   def tiny_url_attrs(attrs \\ %{}) do
+    valid_url = "http://some.valid.com/url?with=params"
+
     attrs
     |> Enum.into(%{
       hit_count: 42,
-      shortened_url: "some shortened_url",
-      url: "some url",
-      hashed_url: Shortener.hash_url("some url")
+      shortened_url: nil,
+      url: valid_url,
+      hashed_url: Shortener.hash_url(valid_url)
     })
   end
 end
