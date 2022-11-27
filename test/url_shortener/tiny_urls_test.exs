@@ -86,7 +86,7 @@ defmodule UrlShortener.TinyUrlsTest do
       attrs = tiny_url_attrs()
       changeset = Ecto.Changeset.change(%TinyUrl{}, attrs)
 
-      inserted = TinyUrls.get_or_insert_tiny_url(changeset)
+      {:ok, inserted} = TinyUrls.get_or_insert_tiny_url(changeset)
       assert !is_nil(inserted.id)
       assert inserted.hashed_url == attrs.hashed_url
     end

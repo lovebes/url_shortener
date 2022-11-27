@@ -1,4 +1,8 @@
 defmodule UrlShortener.TinyUrls.TinyUrl do
+  @moduledoc """
+  Schema. Note `:shortened_url` will be updated right after a new row is inserted.
+  It is not expected that it will be populated beforehand.
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -16,8 +20,9 @@ defmodule UrlShortener.TinyUrls.TinyUrl do
   @doc false
   def changeset(tiny_url, attrs) do
     tiny_url
+    # TODO: add URL validation
     |> cast(attrs, [:url, :shortened_url, :hit_count, :hashed_url])
-    |> validate_required([:url, :shortened_url, :hashed_url])
+    |> validate_required([:url, :hashed_url])
     |> unique_constraint(:hashed_url)
   end
 end

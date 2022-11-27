@@ -6,7 +6,7 @@ defmodule UrlShortener.TinyUrls do
   import Ecto.Query, warn: false
   alias UrlShortener.Repo
 
-  alias UrlShortener.TinyUrls.TinyUrl
+  alias UrlShortener.TinyUrls.{Shortener, TinyUrl}
 
   @doc """
   Returns the list of tiny_urls.
@@ -55,20 +55,46 @@ defmodule UrlShortener.TinyUrls do
 
   @doc """
   Creates a tiny_url.
+  It will also create, if not exists:
+    - :hashed_url
 
   ## Examples
-
       iex> create_tiny_url(%{field: value})
       {:ok, %TinyUrl{}}
 
       iex> create_tiny_url(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
+      iex> create_tiny_url("some url")
+      {:ok, %TinyUrl{}}
+
+      iex> create_tiny_url("some invalid url")
+      {:error, %Ecto.Changeset{}}
+
   """
-  def create_tiny_url(attrs \\ %{}) do
+  def create_tiny_url(url_or_attrs \\ %{})
+
+  def create_tiny_url(url) when is_binary(url) do
+    %TinyUrl{}
+    |> TinyUrl.changeset(attrs_from_url(url))
+    |> get_or_insert_tiny_url()
+  end
+
+  def create_tiny_url(attrs) when is_map(attrs) do
     %TinyUrl{}
     |> TinyUrl.changeset(attrs)
     |> Repo.insert()
+  end
+
+  @doc """
+  Populate the hashed_url and shortened_url
+  Returns attrs for %TinyUrl{}
+  """
+  def attrs_from_url(url) do
+    %{
+      url: url,
+      hashed_url: Shortener.hash_url(url)
+    }
   end
 
   @doc """
@@ -77,7 +103,7 @@ defmodule UrlShortener.TinyUrls do
   Returns %TinyUrl{} (existing or inserted one), or error tuple for any unexpected errors
   """
   @spec get_or_insert_tiny_url(Ecto.Changeset.t()) ::
-          %TinyUrl{}
+          {:ok, %TinyUrl{}}
           | {:error, failed_operation :: atom(), failed_value :: any(), changes_so_far :: list()}
   def get_or_insert_tiny_url(%Ecto.Changeset{valid?: true} = changeset) do
     %TinyUrl{hashed_url: hashed_url} = Ecto.Changeset.apply_changes(changeset)
@@ -93,10 +119,13 @@ defmodule UrlShortener.TinyUrls do
     |> Repo.transaction()
     |> case do
       {:error, :check_exists, {:url_exists, existing}, _changes_so_far} ->
-        existing
+        {:ok, existing}
 
       {:ok, %{insert_url: inserted_url}} ->
-        inserted_url
+        {:ok, inserted_url}
+
+      other_error ->
+        other_error
     end
   end
 
