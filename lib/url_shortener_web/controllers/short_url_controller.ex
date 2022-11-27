@@ -7,8 +7,13 @@ defmodule UrlShortenerWeb.ShortUrlController do
   """
   def redirect_to_url(conn, %{"short_url" => short_url}) do
     case get_tiny_url_by_shortened_url(short_url) do
-      nil -> raise Ecto.NoResultsError
-      tiny_url -> redirect(conn, external: tiny_url.url)
+      nil ->
+        conn
+        |> Plug.Conn.put_status(404)
+        |> text("unable to find url")
+
+      tiny_url ->
+        redirect(conn, external: tiny_url.url)
     end
   end
 end
