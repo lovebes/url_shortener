@@ -22,6 +22,7 @@ defmodule UrlShortenerWeb.TinyUrlLive.FormComponent do
       >
         <.input field={{f, :url}} type="text" label="url" />
         <.input field={{f, :shortened_url}} type="text" label="shortened_url" />
+        <.input field={{f, :hashed_url}} type="text" label="hashed_url" />
         <.input field={{f, :hit_count}} type="number" label="hit_count" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Tiny url</.button>

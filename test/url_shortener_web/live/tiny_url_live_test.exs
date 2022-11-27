@@ -4,16 +4,22 @@ defmodule UrlShortenerWeb.TinyUrlLiveTest do
   import Phoenix.LiveViewTest
   import UrlShortener.TinyUrlsFixtures
 
-  @create_attrs %{hit_count: 42, shortened_url: "some shortened_url", url: "some url"}
+  @create_attrs %{
+    hit_count: 42,
+    shortened_url: "some shortened_url",
+    hashed_url: "some hashed url",
+    url: "http://some.url.com"
+  }
   @update_attrs %{
     hit_count: 43,
     shortened_url: "some updated shortened_url",
-    url: "some updated url"
+    hashed_url: "updated hashed url",
+    url: "http://udpated.url.com"
   }
-  @invalid_attrs %{hit_count: nil, shortened_url: nil, url: nil}
+  @invalid_attrs %{hit_count: nil, shortened_url: nil, url: nil, hashed_url: nil}
 
   defp create_tiny_url(_) do
-    tiny_url = tiny_url_fixture()
+    tiny_url = tiny_url_fixture(%{shortened_url: "short url"})
     %{tiny_url: tiny_url}
   end
 
@@ -22,7 +28,6 @@ defmodule UrlShortenerWeb.TinyUrlLiveTest do
 
     test "lists all tiny_urls", %{conn: conn, tiny_url: tiny_url} do
       {:ok, _index_live, html} = live(conn, ~p"/tiny_urls")
-
       assert html =~ "Listing Tiny urls"
       assert html =~ tiny_url.shortened_url
     end
