@@ -20,9 +20,33 @@ defmodule UrlShortener.TinyUrls.TinyUrl do
   @doc false
   def changeset(tiny_url, attrs) do
     tiny_url
-    # TODO: add URL validation
     |> cast(attrs, [:url, :shortened_url, :hit_count, :hashed_url])
+    |> validate_url()
     |> validate_required([:url, :hashed_url])
     |> unique_constraint(:hashed_url)
+  end
+
+  defp validate_url(changeset) do
+    changeset
+    |> validate_change(:url, fn :url, url ->
+      # validate via URI parsing
+      require IEx
+      IEx.pry()
+
+      if is_valid_url?(URI.parse(url)) do
+        []
+      else
+        [url: "invalid url - scheme or host is missing"]
+      end
+    end)
+  end
+
+  defp is_valid_url?(%URI{scheme: scheme, host: host}) do
+    !is_nil(scheme) && is_valid_host?(host)
+  end
+
+  defp is_valid_host?(host) do
+    # bare minimum host format check to have a '.' in between
+    host |> String.split(".") |> Enum.filter(&(&1 != "")) |> length >= 2
   end
 end
