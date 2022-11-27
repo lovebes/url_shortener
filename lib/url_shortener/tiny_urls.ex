@@ -44,7 +44,7 @@ defmodule UrlShortener.TinyUrls do
 
   ## Examples
 
-      iex> get_tiny_url_by_hash!("694F56F4B30E60837151723777795FC2")
+      iex> get_tiny_url_by_hash("694F56F4B30E60837151723777795FC2")
       %TinyUrl{}
 
       iex> get_tiny_url!("da23423514")
@@ -52,6 +52,22 @@ defmodule UrlShortener.TinyUrls do
 
   """
   def get_tiny_url_by_hash(hashed_url), do: Repo.get_by(TinyUrl, hashed_url: hashed_url)
+
+  @doc """
+  Gets a single tiny_url by :shortened_url
+
+  Returns `nil` if the Tiny url does not exist.
+
+  ## Examples
+
+      iex> get_tiny_url_by_shortened_url("short_url_001")
+      %TinyUrl{}
+
+      iex> get_tiny_url!("wrong_short_url")
+      nil
+
+  """
+  def get_tiny_url_by_shortened_url(shortened), do: Repo.get_by(TinyUrl, shortened_url: shortened)
 
   @doc """
   Creates a tiny_url.

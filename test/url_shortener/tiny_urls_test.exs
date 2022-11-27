@@ -21,9 +21,14 @@ defmodule UrlShortener.TinyUrlsTest do
       assert TinyUrls.get_tiny_url!(tiny_url.id) == tiny_url
     end
 
-    test "get_tiny_url_by_hash/1 returns the tiny_url with given id" do
+    test "get_tiny_url_by_hash/1 returns the tiny_url with given hashed_url" do
       tiny_url = tiny_url_fixture()
       assert TinyUrls.get_tiny_url_by_hash(tiny_url.hashed_url) == tiny_url
+    end
+
+    test "get_tiny_url_by_shortened_url/1 returns the tiny_url with given shortened_url" do
+      tiny_url = tiny_url_fixture(%{shortened_url: "shorty_short"})
+      assert TinyUrls.get_tiny_url_by_shortened_url(tiny_url.shortened_url) == tiny_url
     end
 
     test "create_tiny_url/1 with valid data creates a tiny_url" do
