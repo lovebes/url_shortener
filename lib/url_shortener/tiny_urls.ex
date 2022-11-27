@@ -115,7 +115,7 @@ defmodule UrlShortener.TinyUrls do
   Returns %TinyUrl{} (existing or inserted one), or error tuple for any unexpected errors
   """
   @spec get_or_insert_tiny_url(Ecto.Changeset.t()) ::
-          {:ok, %TinyUrl{}}
+          {:ok, TinyUrl.t()}
           | {:error, failed_operation :: atom(), failed_value :: any(), changes_so_far :: list()}
   def get_or_insert_tiny_url(%Ecto.Changeset{valid?: true} = changeset) do
     %TinyUrl{hashed_url: hashed_url} = Ecto.Changeset.apply_changes(changeset)

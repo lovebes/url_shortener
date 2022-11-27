@@ -1,5 +1,12 @@
 # UrlShortener
 
+TODO:
+- main page: form input
+- tweak tally page
+- benchmark testing
+- deploy
+
+
 To start your Phoenix server:
   * For reviewing how it works, you have two options - I recommend the `docker-compose.yml` approach:
     - Option 1:
