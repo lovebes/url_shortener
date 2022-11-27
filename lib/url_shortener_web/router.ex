@@ -18,6 +18,7 @@ defmodule UrlShortenerWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/tiny/:short_url", ShortUrlController, :redirect_to_url
 
     live "/tiny_urls", TinyUrlLive.Index, :index
     live "/tiny_urls/new", TinyUrlLive.Index, :new
