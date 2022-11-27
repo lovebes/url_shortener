@@ -86,11 +86,7 @@ defmodule UrlShortener.TinyUrls do
     |> Repo.insert()
   end
 
-  @doc """
-  Populate the hashed_url and shortened_url
-  Returns attrs for %TinyUrl{}
-  """
-  def attrs_from_url(url) do
+  defp attrs_from_url(url) do
     %{
       url: url,
       hashed_url: Shortener.hash_url(url)
