@@ -38,6 +38,6 @@ defmodule UrlShortener.TinyUrls.Shortener do
   """
   @spec hash_url(url :: binary()) :: binary()
   def hash_url(url) do
-    :crypto.hash(:md5, url) |> Base.encode16()
+    :crypto.hash(:md5, url) |> Base.encode16() |> String.downcase()
   end
 end

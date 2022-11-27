@@ -11,7 +11,12 @@ defmodule UrlShortener.TinyUrls.ShortenerTest do
 
   describe "hash_url" do
     test "maps correctly to shortened mapped string" do
-      expected = "http://some.url" |> :crypto.hash(:md5, "Elixir\n") |> Base.encode16()
+      expected =
+        "http://some.url"
+        |> :crypto.hash(:md5, "Elixir\n")
+        |> Base.encode16()
+        |> String.downcase()
+
       assert Shortener.hash_url("http://some.url") == expected
     end
   end
