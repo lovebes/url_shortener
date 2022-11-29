@@ -19,9 +19,6 @@ defmodule UrlShortener.TinyUrls.Shortener do
 
   """
 
-  alias UrlShortener.Repo
-  alias UrlShortener.TinyUrls.TinyUrl
-
   @doc """
   Shortens the url using strategy of doing hex-representation of next_index
   Returns lowercased hex digits in string form.

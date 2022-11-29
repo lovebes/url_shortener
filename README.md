@@ -7,6 +7,7 @@
       - Then go to `localhost:4000` to see the app.
       - Note: I haven't solved live reloading in this setup - so you're gonna have to refresh every time you change code.
       - This boots up BOTH the server code and Postgres together inside Docker, so nothing else to install.
+      - Initial run might take a while.
     - Option 2:
       - For when you do have `asdf` installed, and would like to jump/tweak code, and use dockerized postgres (from `docker-compose.yml`) - please do `asdf install` to install the Elixir/Erlang versions in `.tool-versions`.
       - Install dependencies with `mix deps.get`
@@ -55,4 +56,7 @@ The CD piece deploys the code to Fly.io: https://url-shortener-seungjin.fly.dev/
   - lists out the stored URLs
   - subscribes PubSub message, and refreshes URL list
 * /export: Controller that downloads the CSV of the list of URLs
+
+* Note: PubSub based update seems to crash on Dockerized running of the server. Locally it is fine.
+  The crash actually forces a reconnect, so the page still would show an updated hit count.
 
