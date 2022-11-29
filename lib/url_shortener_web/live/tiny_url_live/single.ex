@@ -20,12 +20,6 @@ defmodule UrlShortenerWeb.TinyUrlLive.Single do
     |> assign(:tiny_url, %TinyUrl{})
   end
 
-  defp apply_action(socket, :show, _params) do
-    socket
-    |> assign(:page_title, "Listing Tiny urls")
-    |> assign(:tiny_url, nil)
-  end
-
   defp list_tiny_urls do
     TinyUrls.list_tiny_urls()
   end
