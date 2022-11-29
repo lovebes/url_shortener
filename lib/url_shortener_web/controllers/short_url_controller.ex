@@ -23,11 +23,16 @@ defmodule UrlShortenerWeb.ShortUrlController do
     update_tiny_url(tiny_url, %{hit_count: tiny_url.hit_count + 1})
     |> case do
       {:ok, _} ->
+        broadcast_hit_count_update()
         redirect(conn, external: tiny_url.url)
 
       {:error, err} ->
         Logger.warn("incr_hit_and_redirect: failed to update hit count. Error: #{inspect(err)}")
         redirect(conn, external: tiny_url.url)
     end
+  end
+
+  defp broadcast_hit_count_update() do
+    Phoenix.PubSub.broadcast(UrlShortener.PubSub, "hitcount_updated", nil)
   end
 end

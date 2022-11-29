@@ -3,8 +3,10 @@ defmodule UrlShortenerWeb.TinyUrlLive.Index do
   import UrlShortenerWeb.TinyUrlLive.Components
   alias UrlShortener.TinyUrls
 
+  @topic "hitcount_updated"
   @impl true
   def mount(_params, _session, socket) do
+    Phoenix.PubSub.subscribe(UrlShortener.PubSub, @topic)
     {:ok, assign(socket, :tiny_urls, list_tiny_urls())}
   end
 
@@ -29,5 +31,10 @@ defmodule UrlShortenerWeb.TinyUrlLive.Index do
 
   defp list_tiny_urls do
     TinyUrls.list_tiny_urls()
+  end
+
+  @impl true
+  def handle_info(%{topic: @topic, payload: _state}, socket) do
+    {:noreply, assign(socket, :tiny_urls, list_tiny_urls())}
   end
 end
