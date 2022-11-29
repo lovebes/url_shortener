@@ -5,7 +5,7 @@ dkcbuild:
 	docker-compose build
 
 dkcup:
-	docker-compose up -d
+	docker-compose up
 
 dkcupdb:
 	docker-compose up -d db
