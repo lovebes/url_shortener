@@ -1,6 +1,6 @@
 defmodule UrlShortenerWeb.TinyUrlLive.Single do
   use UrlShortenerWeb, :live_view
-  import UrlShortenerWeb.TinyUrlLive.Components
+
   alias UrlShortener.TinyUrls
   alias UrlShortener.TinyUrls.TinyUrl
 
