@@ -17,3 +17,5 @@ dkcdown:
 dkctest:
 	docker-compose run test
 
+benchmark: 
+	docker-compose run test mix test test/benchmark/call_rate_test.ex

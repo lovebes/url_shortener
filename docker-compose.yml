@@ -38,6 +38,7 @@ services:
       - db
     environment:
       MIX_ENV: test
+      RUNNING_IN_DOCKER: "true"
       PORT: 4001
     volumes:
       - .:/app 
