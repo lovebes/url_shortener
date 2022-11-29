@@ -30,7 +30,8 @@ defmodule UrlShortenerWeb.SingleLiveTest do
 
       assert html =~ "Created (or Retrieved) Url!"
       inserted = @valid_url |> Shortener.hash_url() |> TinyUrls.get_tiny_url_by_hash()
-      assert html =~ inserted.shortened_url
+      expect_url = "#{UrlShortenerWeb.Endpoint.url()}/tiny/#{inserted.shortened_url}"
+      assert html =~ expect_url
     end
   end
 end

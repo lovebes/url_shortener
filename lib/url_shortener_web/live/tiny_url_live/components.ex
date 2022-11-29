@@ -27,7 +27,7 @@ defmodule UrlShortenerWeb.TinyUrlLive.Components do
         @class
       ]}
     >
-      <%= "#{Endpoint.url()}/#{@shortened_url}" %>
+      <%= "#{Endpoint.url()}/tiny/#{@shortened_url}" %>
     </a>
     """
   end
