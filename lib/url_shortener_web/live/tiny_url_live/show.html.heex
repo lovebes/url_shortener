@@ -1,11 +1,7 @@
 <.header>
   Tiny url <%= @tiny_url.id %>
   <:subtitle>This is a tiny_url record from your database.</:subtitle>
-  <:actions>
-    <.link patch={~p"/tiny_urls/#{@tiny_url}/show/edit"} phx-click={JS.push_focus()}>
-      <.button>Edit tiny_url</.button>
-    </.link>
-  </:actions>
+  <:actions></:actions>
 </.header>
 
 <.list>
@@ -17,7 +13,7 @@
   <:item title="Hit count"><%= @tiny_url.hit_count %></:item>
 </.list>
 
-<.back navigate={~p"/tiny_urls"}>Back to tiny_urls</.back>
+<.back navigate={~p"/stats"}>Back to Stats</.back>
 
 <.modal
   :if={@live_action == :edit}

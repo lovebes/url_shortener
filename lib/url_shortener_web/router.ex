@@ -22,12 +22,7 @@ defmodule UrlShortenerWeb.Router do
     get "/tiny/:short_url", ShortUrlController, :redirect_to_url
     live "/stats", TinyUrlLive.Index, :index
 
-    live "/tiny_urls", TinyUrlLive.Index, :index
-    live "/tiny_urls/new", TinyUrlLive.Index, :new
-    live "/tiny_urls/:id/edit", TinyUrlLive.Index, :edit
-
     live "/tiny_urls/:id", TinyUrlLive.Show, :show
-    live "/tiny_urls/:id/show/edit", TinyUrlLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.
