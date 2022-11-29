@@ -36,6 +36,7 @@ defmodule UrlShortener.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:benchee, "~> 1.0", only: :test},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:dotenv_parser, "~> 2.0"},
@@ -45,6 +46,7 @@ defmodule UrlShortener.MixProject do
       {:floki, ">= 0.30.0", only: :test},
       {:gettext, "~> 0.20"},
       {:heroicons, "~> 0.5"},
+      {:httpoison, "~> 1.8"},
       {:jason, "~> 1.2"},
       {:phoenix_ecto, "~> 4.4"},
       {:phoenix_html, "~> 3.0"},
