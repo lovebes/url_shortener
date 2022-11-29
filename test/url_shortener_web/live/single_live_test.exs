@@ -20,7 +20,7 @@ defmodule UrlShortenerWeb.SingleLiveTest do
   describe "Single" do
     setup [:create_tiny_url]
 
-    test "saves new tiny_url", %{conn: conn} do
+    test "saves new tiny_url and shows link to go to shortened url", %{conn: conn} do
       {:ok, single_live, _html} = live(conn, ~p"/")
 
       html =
@@ -32,6 +32,12 @@ defmodule UrlShortenerWeb.SingleLiveTest do
       inserted = @valid_url |> Shortener.hash_url() |> TinyUrls.get_tiny_url_by_hash()
       expect_url = "#{UrlShortenerWeb.Endpoint.url()}/tiny/#{inserted.shortened_url}"
       assert html =~ expect_url
+
+      single_live
+      |> element(~s{a[target="_new"][href="/tiny/#{inserted.shortened_url}"]})
+      |> render_click()
+
+      assert_redirect(single_live, "/tiny/#{inserted.shortened_url}")
     end
   end
 end
