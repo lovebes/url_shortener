@@ -17,8 +17,10 @@ defmodule UrlShortenerWeb.Router do
   scope "/", UrlShortenerWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    # get "/", PageController, :home
+    live "/", TinyUrlLive.Single, :new
     get "/tiny/:short_url", ShortUrlController, :redirect_to_url
+    live "/stats", TinyUrlLive.Index, :index
 
     live "/tiny_urls", TinyUrlLive.Index, :index
     live "/tiny_urls/new", TinyUrlLive.Index, :new

@@ -1,6 +1,7 @@
 defmodule UrlShortenerWeb.TinyUrlLive.FormComponent do
   use UrlShortenerWeb, :live_component
 
+  import UrlShortenerWeb.TinyUrlLive.Components
   alias UrlShortener.TinyUrls
 
   @impl true
@@ -12,19 +13,32 @@ defmodule UrlShortenerWeb.TinyUrlLive.FormComponent do
         <:subtitle>Use this form to manage tiny_url records in your database.</:subtitle>
       </.header>
 
-      <.simple_form
-        :let={f}
-        for={@changeset}
-        id="tiny_url-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
-      >
-        <.input field={{f, :url}} type="text" label="url" disabled="true" />
-        <:actions>
-          <.button phx-disable-with="Saving...">Save Tiny url</.button>
-        </:actions>
-      </.simple_form>
+      <%= if is_nil(assigns[:created_tiny_url]) do %>
+        <.simple_form
+          :let={f}
+          for={@changeset}
+          id="tiny_url-form"
+          phx-target={@myself}
+          phx-change="validate"
+          phx-submit="save"
+        >
+          <.input field={{f, :url}} type="text" label="url" />
+          <:actions>
+            <.button phx-disable-with="Saving...">Save Tiny url</.button>
+          </:actions>
+        </.simple_form>
+      <% else %>
+        <.header>Created (or Retrieved) Url!</.header>
+        <.short_url shortened_url={@created_tiny_url.shortened_url} />
+      <% end %>
+      <div>
+        <.link
+          navigate={~p"/stats"}
+          class="underline text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+        >
+          Go to Stats Table
+        </.link>
+      </div>
     </div>
     """
   end
@@ -59,7 +73,7 @@ defmodule UrlShortenerWeb.TinyUrlLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, "Tiny url updated successfully")
-         |> push_navigate(to: socket.assigns.navigate)}
+         |> maybe_navigate()}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
@@ -68,14 +82,22 @@ defmodule UrlShortenerWeb.TinyUrlLive.FormComponent do
 
   defp save_tiny_url(socket, :new, tiny_url_params) do
     case tiny_url_params |> url_from_params() |> TinyUrls.create_tiny_url() do
-      {:ok, _tiny_url} ->
+      {:ok, tiny_url} ->
         {:noreply,
          socket
+         |> assign(:created_tiny_url, tiny_url)
          |> put_flash(:info, "Tiny url created successfully")
-         |> push_navigate(to: socket.assigns.navigate)}
+         |> maybe_navigate()}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
+    end
+  end
+
+  defp maybe_navigate(socket) do
+    case socket.assigns.navigate do
+      nil -> socket
+      assign_navigate -> push_navigate(socket, to: assign_navigate)
     end
   end
 

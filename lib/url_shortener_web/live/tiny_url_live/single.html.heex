@@ -1,0 +1,12 @@
+<.header>
+  Enter Url to generate a shortened url.
+</.header>
+<.live_component
+  module={UrlShortenerWeb.TinyUrlLive.FormComponent}
+  id={@tiny_url.id || :new}
+  title={@page_title}
+  action={@live_action}
+  tiny_url={@tiny_url}
+  navigate={nil}
+  show_saved={true}
+/>

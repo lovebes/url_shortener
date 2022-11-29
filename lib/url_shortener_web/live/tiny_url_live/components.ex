@@ -11,7 +11,7 @@ defmodule UrlShortenerWeb.TinyUrlLive.Components do
   :inner_block slot becomes the inner DOM, e.g. <a>__HERE__</a>
   ## Examples
 
-      <.short_url>short_url_12</.short_url>
+      <.short_url shortened_url="23" />
   """
   attr :shortened_url, :string, default: nil
   attr :class, :string, default: nil

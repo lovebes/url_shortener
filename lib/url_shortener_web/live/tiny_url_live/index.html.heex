@@ -17,7 +17,6 @@
     <div class="sr-only">
       <.link navigate={~p"/tiny_urls/#{tiny_url}"}>Show</.link>
     </div>
-    <.link patch={~p"/tiny_urls/#{tiny_url}/edit"}>Edit</.link>
   </:action>
   <:action :let={tiny_url}>
     <.link phx-click={JS.push("delete", value: %{id: tiny_url.id})} data-confirm="Are you sure?">
