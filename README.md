@@ -19,6 +19,7 @@
   * `make benchmark`
   * This will test against the deployed service at https://url-shortener-seungjin.fly.dev
   * It runs two tests, one for the form endpoint and another for the tiny url redirection endpoint.
+  * This is why you'll see a hit count that is in the hundreds in: https://url-shortener-seungjin.fly.dev/stats
 
 ## Backend Architecture/Code Notes:
 This is based off of a Phoenix 1.7 scaffolded mix project. 
