@@ -10,7 +10,7 @@ defmodule UrlShortenerWeb.TinyUrlLive.FormComponent do
     <div>
       <.header>
         <%= @title %>
-        <:subtitle>Use this form to manage tiny_url records in your database.</:subtitle>
+        <:subtitle>Generate short urls!</:subtitle>
       </.header>
 
       <%= if is_nil(assigns[:created_tiny_url]) do %>
