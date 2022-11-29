@@ -19,7 +19,7 @@ defmodule UrlShortenerWeb.TinyUrlLive.Components do
   def short_url(assigns) do
     ~H"""
     <a
-      href={~p"/tiny/#{@shortened_url}"}
+      href={~p"/#{@shortened_url}"}
       target="_new"
       class={[
         "underline text-blue-800 rounded-lg border-2 border-blue-300 hover:border-blue-700 py-2 px-3",
@@ -27,7 +27,7 @@ defmodule UrlShortenerWeb.TinyUrlLive.Components do
         @class
       ]}
     >
-      <%= "#{Endpoint.url()}/tiny/#{@shortened_url}" %>
+      <%= "#{Endpoint.url()}/#{@shortened_url}" %>
     </a>
     """
   end

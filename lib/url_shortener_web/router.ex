@@ -18,8 +18,8 @@ defmodule UrlShortenerWeb.Router do
     pipe_through :browser
 
     live "/", TinyUrlLive.Single, :new
-    get "/tiny/:short_url", ShortUrlController, :redirect_to_url
     live "/stats", TinyUrlLive.Index, :index
+    get "/:short_url", ShortUrlController, :redirect_to_url
 
     live "/stats/:id", TinyUrlLive.Show, :show
   end

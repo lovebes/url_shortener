@@ -30,14 +30,14 @@ defmodule UrlShortenerWeb.SingleLiveTest do
 
       assert html =~ "Created (or Retrieved) Url!"
       inserted = @valid_url |> Shortener.hash_url() |> TinyUrls.get_tiny_url_by_hash()
-      expect_url = "#{UrlShortenerWeb.Endpoint.url()}/tiny/#{inserted.shortened_url}"
+      expect_url = "#{UrlShortenerWeb.Endpoint.url()}/#{inserted.shortened_url}"
       assert html =~ expect_url
 
       single_live
-      |> element(~s{a[target="_new"][href="/tiny/#{inserted.shortened_url}"]})
+      |> element(~s{a[target="_new"][href="/#{inserted.shortened_url}"]})
       |> render_click()
 
-      assert_redirect(single_live, "/tiny/#{inserted.shortened_url}")
+      assert_redirect(single_live, "/#{inserted.shortened_url}")
     end
   end
 end

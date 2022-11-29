@@ -1,9 +1,8 @@
 defmodule UrlShortener.CallRateTest do
   use ExUnit.Case
-  import UrlShortener.TinyUrlsFixtures
 
   @deployed_url "https://url-shortener-seungjin.fly.dev/"
-  @deployed_url_short_url "https://url-shortener-seungjin.fly.dev/tiny/3"
+  @deployed_url_short_url "https://url-shortener-seungjin.fly.dev/3"
 
   describe "form endpoint" do
     @tag :benchmark
