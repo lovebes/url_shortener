@@ -19,6 +19,7 @@ defmodule UrlShortenerWeb.Router do
 
     live "/", TinyUrlLive.Single, :new
     live "/stats", TinyUrlLive.Index, :index
+    get "/export", ExportController, :download
     get "/:short_url", ShortUrlController, :redirect_to_url
 
     live "/stats/:id", TinyUrlLive.Show, :show

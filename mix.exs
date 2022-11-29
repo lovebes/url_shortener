@@ -38,6 +38,7 @@ defmodule UrlShortener.MixProject do
     [
       {:benchee, "~> 1.0", only: :test},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      {:csv, "~> 3.0"},
       {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:dotenv_parser, "~> 2.0"},
       {:ecto_sql, "~> 3.6"},
