@@ -15,7 +15,7 @@
   <:col :let={tiny_url} label="Hit count"><%= tiny_url.hit_count %></:col>
   <:action :let={tiny_url}>
     <div class="sr-only">
-      <.link navigate={~p"/tiny_urls/#{tiny_url}"}>Show</.link>
+      <.link navigate={~p"/stats/#{tiny_url}"}>Show</.link>
     </div>
   </:action>
   <:action :let={tiny_url}>
@@ -29,7 +29,7 @@
   :if={@live_action in [:new, :edit]}
   id="tiny_url-modal"
   show
-  on_cancel={JS.navigate(~p"/tiny_urls")}
+  on_cancel={JS.navigate(~p"/stats")}
 >
   <.live_component
     module={UrlShortenerWeb.TinyUrlLive.FormComponent}
@@ -37,6 +37,6 @@
     title={@page_title}
     action={@live_action}
     tiny_url={@tiny_url}
-    navigate={~p"/tiny_urls"}
+    navigate={~p"/stats"}
   />
 </.modal>

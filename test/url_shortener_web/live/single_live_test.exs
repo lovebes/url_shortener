@@ -1,4 +1,4 @@
-defmodule UrlShortenerWeb.TinyUrlLiveTest do
+defmodule UrlShortenerWeb.SingleLiveTest do
   alias UrlShortener.TinyUrls
   alias UrlShortener.TinyUrls.Shortener
   use UrlShortenerWeb.ConnCase
@@ -11,7 +11,6 @@ defmodule UrlShortenerWeb.TinyUrlLiveTest do
   @create_attrs %{
     url: @valid_url
   }
-  @invalid_attrs %{hit_count: nil, shortened_url: nil, url: nil, hashed_url: nil}
 
   defp create_tiny_url(_) do
     tiny_url = tiny_url_fixture(%{shortened_url: "short url"})

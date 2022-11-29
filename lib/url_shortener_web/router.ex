@@ -21,6 +21,6 @@ defmodule UrlShortenerWeb.Router do
     get "/tiny/:short_url", ShortUrlController, :redirect_to_url
     live "/stats", TinyUrlLive.Index, :index
 
-    live "/tiny_urls/:id", TinyUrlLive.Show, :show
+    live "/stats/:id", TinyUrlLive.Show, :show
   end
 end

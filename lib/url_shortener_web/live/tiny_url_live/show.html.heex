@@ -14,19 +14,3 @@
 </.list>
 
 <.back navigate={~p"/stats"}>Back to Stats</.back>
-
-<.modal
-  :if={@live_action == :edit}
-  id="tiny_url-modal"
-  show
-  on_cancel={JS.patch(~p"/tiny_urls/#{@tiny_url}")}
->
-  <.live_component
-    module={UrlShortenerWeb.TinyUrlLive.FormComponent}
-    id={@tiny_url.id}
-    title={@page_title}
-    action={@live_action}
-    tiny_url={@tiny_url}
-    navigate={~p"/tiny_urls/#{@tiny_url}"}
-  />
-</.modal>
